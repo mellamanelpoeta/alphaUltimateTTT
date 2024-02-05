@@ -1,0 +1,9 @@
+project:
+  output-dir: _docs
+
+website:
+  title: "alphaUltimateTTT"
+  site-url: "https://mellamanelpoeta.github.io/alphaUltimateTTT"
+  description: "This is an implementation of the AlphaZero algorithm to play UltimateTicTacToe"
+  repo-branch: main
+  repo-url: "https://github.com/mellamanelpoeta/alphaUltimateTTT"
