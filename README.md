@@ -7,16 +7,4 @@ documentation.
 
 ## Install
 
-``` sh
-pip install alphaUltimateTTT
-```
-
-## How to use
-
-Fill me in please! Don’t forget code examples:
-
-``` python
-1+1
-```
-
-    2
+<em> Building… </em>
