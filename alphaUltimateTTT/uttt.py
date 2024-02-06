@@ -2,7 +2,7 @@
 
 # %% auto 0
 __all__ = ['SIZE', 'NEXT_SYMBOL_INDEX', 'CONSTRAINT_INDEX', 'RESULT_INDEX', 'X_STATE_VALUE', 'O_STATE_VALUE', 'DRAW_STATE_VALUE',
-           'UNCONSTRAINED_STATE_VALUE', 'Action', 'UltimateTicTacToe']
+           'UNCONSTRAINED_STATE_VALUE', 'Action', 'UltimateTicTacToe', 'utttError']
 
 # %% ../nbs/Game/ultimatettt.ipynb 4
 #0-80 squares, 81-89 result of each subgame, 90 next symbol, 91 subgame constraint, 92 result of uttt
@@ -40,7 +40,7 @@ class Action:
         )
         return output
 
-# %% ../nbs/Game/ultimatettt.ipynb 7
+# %% ../nbs/Game/ultimatettt.ipynb 6
 class UltimateTicTacToe:
     def __init__(self,
                 state:bytearray = None): #If no state is given, it generates a new one. 
@@ -99,3 +99,7 @@ class UltimateTicTacToe:
                 raise utttError('The game is over')
             self._verify_action(action)
             
+
+# %% ../nbs/Game/ultimatettt.ipynb 8
+class utttError(Exception):
+    pass
