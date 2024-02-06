@@ -1,0 +1,8 @@
+website:
+  sidebar:
+    contents:
+      - index.ipynb
+      - 00_core.ipynb
+      - section: Game
+        contents:
+          - Game/ultimatettt.ipynb
