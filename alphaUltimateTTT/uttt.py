@@ -2,9 +2,9 @@
 
 # %% auto 0
 __all__ = ['SIZE', 'NEXT_SYMBOL_INDEX', 'CONSTRAINT_INDEX', 'RESULT_INDEX', 'X_STATE_VALUE', 'O_STATE_VALUE', 'DRAW_STATE_VALUE',
-           'UNCONSTRAINED_STATE_VALUE', 'Action', 'UltimateTicTacToe', 'utttError']
+           'UNCONSTRAINED_STATE_VALUE', 'Move', 'UltimateTicTacToe', 'utttError']
 
-# %% ../nbs/Game/ultimatettt.ipynb 4
+# %% ../nbs/Game/ultimatettt.ipynb 3
 #0-80 squares, 81-89 result of each subgame, 90 next symbol, 91 subgame constraint, 92 result of uttt
 SIZE = 93 
 NEXT_SYMBOL_INDEX = 90
@@ -16,12 +16,12 @@ O_STATE_VALUE = 2
 DRAW_STATE_VALUE = 3
 UNCONSTRAINED_STATE_VALUE = 9
 
-# %% ../nbs/Game/ultimatettt.ipynb 5
-class Action:
+# %% ../nbs/Game/ultimatettt.ipynb 4
+class Move:
     def __init__(self,
                 symbol: int, # X_STATE_VALUE = 1 or O_STATE_VALUE = 2
                 index: int): # int from 0 to 80
-        '''An action contains the symbol (represented as an int) and the index (int from 0 to 80) where the symbol will be placed.'''
+        '''A move contains the symbol (represented as an int) and the index (int from 0 to 80) where the symbol will be placed.'''
         self.symbol = symbol  # X_STATE_VALUE or O_STATE_VALUE
         self.index = index  # int from 0 to 80
 
@@ -40,23 +40,31 @@ class Action:
         )
         return output
 
-# %% ../nbs/Game/ultimatettt.ipynb 6
+# %% ../nbs/Game/ultimatettt.ipynb 5
 class UltimateTicTacToe:
     def __init__(self,
                 state:bytearray = None): #If no state is given, it generates a new one. 
         '''The state is a bytearray of 93 elements. 
-        The first 81 elements are the state of each square, 0 for empty, 1 for X and -1 for O. \n
-        The next 9 elements are the result of each subgame, 0 for draw, 1 for X and -1 for O.\n 
-        The next element is the next symbol to play, 1 for X and 2 for O.\n 
-        The next element is the index of the subgame that is constrained, 9 for no subgame constrained. \n
-        The last element is the result of the UTTT, 0 while being played, 3 for draw, 2 for O and 1 for X.'''
+        The first 81 elements are the state of each square, 0 for empty, 1 for X and 2 for O. \n
+        The next 9 elements are the result of each subgame: 0 while being played, 1 is win for X, 2 is a win for O and 3 for draw.\n 
+        The next element is the next symbol to play: 1 for X and 2 for O.\n 
+        The next element is the index of the subgame that is constrained, 9 for no subgame constraint. \n
+        The last element is the result of the UTTT: 0 while being played, 1 is win for X, 2 is a win for O and 3 for draw.'''
         if state:
             self.state = state
         else:
             self.state = bytearray(SIZE) #generates the array
             self.state[NEXT_SYMBOL_INDEX] = X_STATE_VALUE #X always starts the game
             self.state[CONSTRAINT_INDEX] = UNCONSTRAINED_STATE_VALUE #no subgame is constrained at the beginning
-   
+
+
+    @property
+    def result(self) -> int:
+        return self.state[RESULT_INDEX]
+    
+    @property
+    def next_symbol(self) -> int:
+        return self.state[NEXT_SYMBOL_INDEX]
 
     def is_game_over(self) -> bool:
         '''Returns True if the game is over, False otherwise.'''
@@ -75,31 +83,145 @@ class UltimateTicTacToe:
         return self.state[CONSTRAINT_INDEX] != UNCONSTRAINED_STATE_VALUE
     
     
-    def _verify_action(self, action: Action):
-        illegal_action = f"Illegal action {action} - "
-        if self.is_next_symbol_X() and not action.is_symbol_X():
+    def _verify_move(self, move: Move):
+        illegal_action = f"Illegal action {move} - "
+        if self.is_next_symbol_X() and not move.is_symbol_X():
             raise utttError(illegal_action + "next move belongs to X")
-        if self.is_next_symbol_O() and not action.is_symbol_O():
+        if self.is_next_symbol_O() and not move.is_symbol_O():
             raise utttError(illegal_action + "next move belongs to O")
-        if not (0 <= action.index < 81):
+        if not (0 <= move.index < 81):
             raise utttError(illegal_action + "index outside the valid range")
-        if self.is_constrained() and self.constraint != action.index // 9:
+        if self.is_constrained() and self.constraint != move.index // 9:
             raise utttError(illegal_action + f"violated constraint={self.constraint}")
-        if self.state[81 + action.index // 9]:
+        if self.state[81 + move.index // 9]:
             raise utttError(illegal_action + "index from terminated subgame")
-        if self.state[action.index]:
+        if self.state[move.index]:
             raise utttError(illegal_action + "index is already taken")
+        
+    def _get_subgame_result(self,
+                            subgame_index: int) -> int:   #Index of the subgame from 0 to 8
+        '''Returns the result of the subgame.''' 
+        return self.state[81 + subgame_index]
+        
+    def _update_state(self, move: Move):
+        self.state[move.index] = move.symbol
+        self.state[NEXT_SYMBOL_INDEX] = X_STATE_VALUE + O_STATE_VALUE - move.symbol
+
+        #Check if the subgame on index move.index // 9 is still being played. If it is, constraint to it. Else, unconstrain the game.
+        if not self._get_subgame_result(move.index // 9):
+            self.state[CONSTRAINT_INDEX] = UNCONSTRAINED_STATE_VALUE
+        else:
+            self.state[CONSTRAINT_INDEX] = move.index % 9
+
 
     def make_move(self,
-                action: Action, #Receives an action and updates the state of the game.
+                move: Move, #Receives a move and updates the state of the game.
                 verify: bool = True): #A boolean to verify if the move is valid.
         '''Makes a move in the game.'''
         if verify:
             if self.is_game_over():
                 raise utttError('The game is over')
-            self._verify_action(action)
-            
+            self._verify_move(move)
 
-# %% ../nbs/Game/ultimatettt.ipynb 8
+        self._update_state(move)
+        self._verify_subgame_result(move.index // 9)
+        self._verify_game_result()
+    
+    def _verify_subgame_result(self, subgame_index: int):
+        '''Verifies if the subgame is over and updates the state of the subgame.'''
+        subgame = self.state[subgame_index * 9 : subgame_index * 9 + 9]
+        if subgame[0] == subgame[1] == subgame[2] != 0 or subgame[3] == subgame[4] == subgame[5] != 0 or subgame[6] == subgame[7] == subgame[8] != 0 or subgame[0] == subgame[3] == subgame[6] != 0 or subgame[1] == subgame[4] == subgame[7] != 0 or subgame[2] == subgame[5] == subgame[8] != 0 or subgame[0] == subgame[4] == subgame[8] != 0 or subgame[2] == subgame[4] == subgame[6] != 0:
+            self.state[81 + subgame_index] = subgame[0]
+        elif 0 not in subgame:
+            self.state[81 + subgame_index] = DRAW_STATE_VALUE
+    
+    def _verify_game_result(self):
+        '''Verifies if the game is over and updates the state of the game.'''
+        for i in range(9):
+            if not self.state[81 + i]:
+                return
+        game = self.state[81:90]
+        if game[0] == game[1] == game[2] != 0 or game[3] == game[4] == game[5] != 0 or game[6] == game[7] == game[8] != 0 or game[0] == game[3] == game[6] != 0 or game[1] == game[4] == game[7] != 0 or game[2] == game[5] == game[8] != 0 or game[0] == game[4] == game[8] != 0 or game[2] == game[4] == game[6] != 0:
+            self.state[RESULT_INDEX] = game[0]
+        elif 0 not in game:
+            self.state[RESULT_INDEX] = DRAW_STATE_VALUE
+    
+    def get_legal_indexes(self) -> list:
+        '''Returns a list with the indexes of the legal moves.'''
+        return [i for i in range(81) if not self.state[i] and (not self.is_constrained() or i // 9 == self.state[CONSTRAINT_INDEX])]
+
+    def __str__(self):
+        state_values_map = {
+            X_STATE_VALUE: 'X',
+            O_STATE_VALUE: 'O',
+            DRAW_STATE_VALUE: '=',
+            0: '-',
+        }
+        subgames = [state_values_map[s] for s in self.state[0:81]]
+        supergame = [state_values_map[s] for s in self.state[81:90]]
+        if not self.is_game_over():
+            for legal_index in self.get_legal_indexes():
+                subgames[legal_index] = '•'
+            if self.is_constrained():
+                supergame[self.constraint] = '•'
+            else:
+                supergame = ['•' if s == '-' else s for s in supergame]
+        sb = lambda l, r: ' '.join(subgames[l : r + 1])
+        sp = lambda l, r: ' '.join(supergame[l : r + 1])
+        subgames = [
+            '    0 1 2   3 4 5   6 7 8',
+            '  0 ' + sb(0, 2) + ' │ ' + sb(9, 11) + ' │ ' + sb(18, 20),
+            '  1 ' + sb(3, 5) + ' │ ' + sb(12, 14) + ' │ ' + sb(21, 23),
+            '  2 ' + sb(6, 8) + ' │ ' + sb(15, 17) + ' │ ' + sb(24, 26),
+            '    ' + '—' * 21,
+            '  3 ' + sb(27, 29) + ' │ ' + sb(36, 38) + ' │ ' + sb(45, 47),
+            '  4 ' + sb(30, 32) + ' │ ' + sb(39, 41) + ' │ ' + sb(48, 50),
+            '  5 ' + sb(33, 35) + ' │ ' + sb(42, 44) + ' │ ' + sb(51, 53),
+            '    ' + '—' * 21,
+            '  6 ' + sb(54, 56) + ' │ ' + sb(63, 65) + ' │ ' + sb(72, 74),
+            '  7 ' + sb(57, 59) + ' │ ' + sb(66, 68) + ' │ ' + sb(75, 77),
+            '  8 ' + sb(60, 62) + ' │ ' + sb(69, 71) + ' │ ' + sb(78, 80),
+        ]
+        supergame = [
+            '  ' + sp(0, 2),
+            '  ' + sp(3, 5),
+            '  ' + sp(6, 8),
+        ]
+        subgames = '\n'.join(subgames)
+        supergame = '\n'.join(supergame)
+        next_symbol = state_values_map[self.next_symbol]
+        constraint = 'None' if not self.is_constrained() else str(self.state[CONSTRAINT_INDEX])
+        result = 'None'
+        if self.result == X_STATE_VALUE:
+            result = 'X_WON'
+        elif self.result == O_STATE_VALUE:
+            result = 'O_WON'
+        elif self.result == DRAW_STATE_VALUE:
+            result = 'DRAW'
+        output = '{cls}(\n'
+        output += '  subgames:\n{subgames}\n'
+        if not self.is_game_over():
+            output += '  next_symbol: {next_symbol}\n'
+            output += '  constraint: {constraint}\n'
+        output += '  supergame:\n{supergame}\n'
+        output += '  result: {result}\n)'
+        output = output.format(
+            cls=self.__class__.__name__,
+            subgames=subgames,
+            supergame=supergame,
+            next_symbol=next_symbol,
+            constraint=constraint,
+            result=result,
+        )
+        return output
+    
+    def play(self, index):
+        '''Plays in the given index.'''
+        move = Move(self.next_symbol, index)
+        self.make_move(move)
+        print(self)
+
+
+# %% ../nbs/Game/ultimatettt.ipynb 7
 class utttError(Exception):
     pass
