@@ -2,7 +2,7 @@
 
 # %% auto 0
 __all__ = ['SIZE', 'NEXT_SYMBOL_INDEX', 'CONSTRAINT_INDEX', 'RESULT_INDEX', 'X_STATE_VALUE', 'O_STATE_VALUE', 'DRAW_STATE_VALUE',
-           'UNCONSTRAINED_STATE_VALUE', 'Move', 'UltimateTicTacToe', 'utttError']
+           'UNCONSTRAINED_STATE_VALUE', 'MAPPING', 'Move', 'UltimateTicTacToe', 'utttError']
 
 # %% ../nbs/Game/ultimatettt.ipynb 3
 #0-80 squares, 81-89 result of each subgame, 90 next symbol, 91 subgame constraint, 92 result of uttt
@@ -15,6 +15,53 @@ X_STATE_VALUE = 1
 O_STATE_VALUE = 2
 DRAW_STATE_VALUE = 3
 UNCONSTRAINED_STATE_VALUE = 9
+MAPPING ={
+#First subgame
+(0,0): 0, (0,1): 1, (0,2): 2, 
+(1,0):3, (1,1): 4, (1,2): 5,
+(2,0):6, (2,1):7, (2,2):8, 
+
+#Second subgame
+(0,3):9, (0,4):10, (0,5):11, 
+(1,3):12, (1,4):13, (1,5):14,
+(2,3):15, (2,4):16, (2,5):17,
+
+#Third subgame
+(0,6):18, (0,7):19, (0,8):20, 
+(1,6):21, (1,7):22, (1,8):23,
+(2,6):24, (2,7):25, (2,8):26,
+
+#Fourth subgame
+(3,0):27, (3,1):28, (3,2):29, 
+(4,0):30, (4,1):31, (4,2):32,
+(5,0):33, (5,1):34, (5,2):35,
+
+#Fifth subgame 
+(3,3):36, (3,4):37, (3,5):38, 
+(4,3):39, (4,4):40, (4,5):41,
+(5,3):42, (5,4):43, (5,5):44,
+
+#Sixth subgame
+(3,6):45, (3,7):46, (3,8):47, 
+(4,6):48, (4,7):49, (4,8):50,
+(5,6):51, (5,7):52, (5,8):53,
+
+#Seventh subgame
+(6,0):54, (6,1):55, (6,2):56, 
+(7,0):57, (7,1):58, (7,2):59,
+(8,0):60, (8,1):61, (8,2):62,
+
+#Eighth subgame
+(6,3):63, (6,4):64, (6,5):65, 
+(7,3):66, (7,4):67, (7,5):68,
+(8,3):69, (8,4):70, (8,5):71,
+
+#Ninth subgame
+(6,6):72, (6,7):73, (6,8):74, 
+(7,6):75, (7,7):76, (7,8):77,
+(8,6):78, (8,7):79, (8,8):80,
+}
+
 
 # %% ../nbs/Game/ultimatettt.ipynb 4
 class Move:
@@ -43,7 +90,7 @@ class Move:
 # %% ../nbs/Game/ultimatettt.ipynb 5
 class UltimateTicTacToe:
     def __init__(self,
-                state:bytearray = None): #If no state is given, it generates a new one. 
+                state:list() = None): #If no state is given, it generates a new one. 
         '''The state is a bytearray of 93 elements. 
         The first 81 elements are the state of each square, 0 for empty, 1 for X and 2 for O. \n
         The next 9 elements are the result of each subgame: 0 while being played, 1 is win for X, 2 is a win for O and 3 for draw.\n 
@@ -53,7 +100,7 @@ class UltimateTicTacToe:
         if state:
             self.state = state
         else:
-            self.state = bytearray(SIZE) #generates the array
+            self.state = [0] * SIZE
             self.state[NEXT_SYMBOL_INDEX] = X_STATE_VALUE #X always starts the game
             self.state[CONSTRAINT_INDEX] = UNCONSTRAINED_STATE_VALUE #no subgame is constrained at the beginning
 
@@ -65,6 +112,10 @@ class UltimateTicTacToe:
     @property
     def next_symbol(self) -> int:
         return self.state[NEXT_SYMBOL_INDEX]
+    
+    @property
+    def constraint(self) -> int:
+        return self.state[CONSTRAINT_INDEX]
 
     def is_game_over(self) -> bool:
         '''Returns True if the game is over, False otherwise.'''
@@ -103,15 +154,20 @@ class UltimateTicTacToe:
         '''Returns the result of the subgame.''' 
         return self.state[81 + subgame_index]
         
-    def _update_state(self, move: Move):
+    def _update_state(self,
+                      move: Move): #Updates the state of the game after a move.
         self.state[move.index] = move.symbol
         self.state[NEXT_SYMBOL_INDEX] = X_STATE_VALUE + O_STATE_VALUE - move.symbol
 
-        #Check if the subgame on index move.index // 9 is still being played. If it is, constraint to it. Else, unconstrain the game.
-        if not self._get_subgame_result(move.index // 9):
-            self.state[CONSTRAINT_INDEX] = UNCONSTRAINED_STATE_VALUE
+        self._verify_subgame_result(move)
+        self._verify_game_result(move)
+
+        #Check if the subgame on index move.index % 9 is still being played. If it is, constraint to it. Else, unconstrain the game.
+        subgame_index = move.index % 9
+        if not self._get_subgame_result(subgame_index):
+            self.state[CONSTRAINT_INDEX] = subgame_index
         else:
-            self.state[CONSTRAINT_INDEX] = move.index % 9
+            self.state[CONSTRAINT_INDEX] = UNCONSTRAINED_STATE_VALUE
 
 
     def make_move(self,
@@ -124,31 +180,58 @@ class UltimateTicTacToe:
             self._verify_move(move)
 
         self._update_state(move)
-        self._verify_subgame_result(move.index // 9)
-        self._verify_game_result()
+        self._verify_game_result(move)
+        if self.is_game_over():
+            print('The game is over')
+            if self.state[RESULT_INDEX] == DRAW_STATE_VALUE:
+                print('The game is a draw')
+            elif self.state[RESULT_INDEX] == X_STATE_VALUE:
+                print('X is the winner')
+            else:
+                print('O is the winner')
+
+    def is_winning_position(self,
+                            game:list) -> bool: #Receives a list of 9 elements and returns True if it is a winning position, False otherwise.
+        '''Returns True if the game is a winning position, False otherwise.'''
+        return game[0] == game[1] == game[2] != 0 or game[3] == game[4] == game[5] != 0 or game[6] == game[7] == game[8] != 0 or game[0] == game[3] == game[6] != 0 or game[1] == game[4] == game[7] != 0 or game[2] == game[5] == game[8] != 0 or game[0] == game[4] == game[8] != 0 or game[2] == game[4] == game[6] != 0
+
+    def is_drawn_position(self,
+                          game:list) -> bool: #Receives a list of 9 elements and returns True if it is a drawn position, False otherwise.
+        '''Returns True if the game is a drawn position, False otherwise.'''
+        return 0 not in game
     
-    def _verify_subgame_result(self, subgame_index: int):
+    def _verify_subgame_result(self, move):
         '''Verifies if the subgame is over and updates the state of the subgame.'''
+        subgame_index = move.index % 9
         subgame = self.state[subgame_index * 9 : subgame_index * 9 + 9]
-        if subgame[0] == subgame[1] == subgame[2] != 0 or subgame[3] == subgame[4] == subgame[5] != 0 or subgame[6] == subgame[7] == subgame[8] != 0 or subgame[0] == subgame[3] == subgame[6] != 0 or subgame[1] == subgame[4] == subgame[7] != 0 or subgame[2] == subgame[5] == subgame[8] != 0 or subgame[0] == subgame[4] == subgame[8] != 0 or subgame[2] == subgame[4] == subgame[6] != 0:
-            self.state[81 + subgame_index] = subgame[0]
-        elif 0 not in subgame:
+        if self.is_winning_position(subgame):
+            self.state[81 + subgame_index] = move.symbol
+        elif self.is_drawn_position(subgame):
             self.state[81 + subgame_index] = DRAW_STATE_VALUE
     
-    def _verify_game_result(self):
+    def _verify_game_result(self,move):
         '''Verifies if the game is over and updates the state of the game.'''
+        symbol = move.symbol
         for i in range(9):
             if not self.state[81 + i]:
                 return
         game = self.state[81:90]
-        if game[0] == game[1] == game[2] != 0 or game[3] == game[4] == game[5] != 0 or game[6] == game[7] == game[8] != 0 or game[0] == game[3] == game[6] != 0 or game[1] == game[4] == game[7] != 0 or game[2] == game[5] == game[8] != 0 or game[0] == game[4] == game[8] != 0 or game[2] == game[4] == game[6] != 0:
-            self.state[RESULT_INDEX] = game[0]
-        elif 0 not in game:
+        if self.is_winning_position(game):
+            self.state[RESULT_INDEX] = symbol
+        elif self.is_drawn_position(game):
             self.state[RESULT_INDEX] = DRAW_STATE_VALUE
     
+    def is_winner(self, index: int) -> bool:
+        '''Returns True if the symbol in the index is the winner, False otherwise.'''
+        return self.state[81 + index] == 1 or self.state[81 + index] == 2
+
     def get_legal_indexes(self) -> list:
         '''Returns a list with the indexes of the legal moves.'''
-        return [i for i in range(81) if not self.state[i] and (not self.is_constrained() or i // 9 == self.state[CONSTRAINT_INDEX])]
+        if not self.is_constrained():
+            return [i for i in range(81) if not self.state[i]]
+        else:
+            subgame_index = self.state[CONSTRAINT_INDEX]
+            return [i for i in range(subgame_index * 9, subgame_index * 9 + 9) if not self.state[i]]
 
     def __str__(self):
         state_values_map = {
@@ -157,18 +240,24 @@ class UltimateTicTacToe:
             DRAW_STATE_VALUE: '=',
             0: '-',
         }
-        subgames = [state_values_map[s] for s in self.state[0:81]]
+
+        subgames = [state_values_map[s] for s in self.state[:81]]
         supergame = [state_values_map[s] for s in self.state[81:90]]
+
         if not self.is_game_over():
-            for legal_index in self.get_legal_indexes():
+            legal_indexes = self.get_legal_indexes()
+            for legal_index in legal_indexes:
                 subgames[legal_index] = '•'
+
             if self.is_constrained():
                 supergame[self.constraint] = '•'
-            else:
+            elif self.constraint == UNCONSTRAINED_STATE_VALUE:
                 supergame = ['•' if s == '-' else s for s in supergame]
+
         sb = lambda l, r: ' '.join(subgames[l : r + 1])
         sp = lambda l, r: ' '.join(supergame[l : r + 1])
-        subgames = [
+
+        subgames_str = [
             '    0 1 2   3 4 5   6 7 8',
             '  0 ' + sb(0, 2) + ' │ ' + sb(9, 11) + ' │ ' + sb(18, 20),
             '  1 ' + sb(3, 5) + ' │ ' + sb(12, 14) + ' │ ' + sb(21, 23),
@@ -182,15 +271,18 @@ class UltimateTicTacToe:
             '  7 ' + sb(57, 59) + ' │ ' + sb(66, 68) + ' │ ' + sb(75, 77),
             '  8 ' + sb(60, 62) + ' │ ' + sb(69, 71) + ' │ ' + sb(78, 80),
         ]
-        supergame = [
+
+        supergame_str = [
             '  ' + sp(0, 2),
             '  ' + sp(3, 5),
             '  ' + sp(6, 8),
         ]
-        subgames = '\n'.join(subgames)
-        supergame = '\n'.join(supergame)
+
+        subgames_str = '\n'.join(subgames_str)
+        supergame_str = '\n'.join(supergame_str)
+
         next_symbol = state_values_map[self.next_symbol]
-        constraint = 'None' if not self.is_constrained() else str(self.state[CONSTRAINT_INDEX])
+        constraint = 'None' if self.constraint == UNCONSTRAINED_STATE_VALUE else str(self.constraint)
         result = 'None'
         if self.result == X_STATE_VALUE:
             result = 'X_WON'
@@ -198,29 +290,27 @@ class UltimateTicTacToe:
             result = 'O_WON'
         elif self.result == DRAW_STATE_VALUE:
             result = 'DRAW'
-        output = '{cls}(\n'
-        output += '  subgames:\n{subgames}\n'
+
+        output = f'{self.__class__.__name__}(\n'
+        output += f'  subgames:\n{subgames_str}\n'
         if not self.is_game_over():
-            output += '  next_symbol: {next_symbol}\n'
-            output += '  constraint: {constraint}\n'
-        output += '  supergame:\n{supergame}\n'
-        output += '  result: {result}\n)'
-        output = output.format(
-            cls=self.__class__.__name__,
-            subgames=subgames,
-            supergame=supergame,
-            next_symbol=next_symbol,
-            constraint=constraint,
-            result=result,
-        )
+            output += f'  next_symbol: {next_symbol}\n'
+            output += f'  constraint: {constraint}\n'
+        output += f'  supergame:\n{supergame_str}\n'
+        output += f'  result: {result}\n)'
         return output
     
-    def play(self, index):
-        '''Plays in the given index.'''
-        move = Move(self.next_symbol, index)
-        self.make_move(move)
-        print(self)
+    def map_matrix_to_subgame(self, matrix_index: int) -> int:
+        digit_1 = matrix_index // 10 
+        digit_2 = matrix_index % 10
+        subgame_index = MAPPING[(digit_1, digit_2)]
+        return subgame_index
 
+    def play(self, matrix_index: int):
+        '''Plays the game. Receives a matrix index and makes a move in the corresponding state index.'''
+        index = self.map_matrix_to_subgame(matrix_index)
+        self.make_move(Move(self.next_symbol, index))
+        print(self)
 
 # %% ../nbs/Game/ultimatettt.ipynb 7
 class utttError(Exception):
