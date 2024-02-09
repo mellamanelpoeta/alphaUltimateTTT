@@ -5,5 +5,5 @@ website:
       - section: Game
         contents:
           - Game/About.ipynb
-          - Game/ultimatettt.ipynb
           - Game/Showcase.ipynb
+          - Game/ultimatettt.ipynb

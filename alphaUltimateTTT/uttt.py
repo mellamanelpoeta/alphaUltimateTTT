@@ -17,49 +17,49 @@ DRAW_STATE_VALUE = 3
 UNCONSTRAINED_STATE_VALUE = 9
 MAPPING ={
 #First subgame
-(0,0): 0, (0,1): 1, (0,2): 2, 
-(1,0):3, (1,1): 4, (1,2): 5,
-(2,0):6, (2,1):7, (2,2):8, 
+(1,1): 0, (1,2): 1, (1,3): 2, 
+(2,1):3, (2,2): 4, (2,3): 5,
+(3,1):6, (3,2):7, (3,3):8, 
 
 #Second subgame
-(0,3):9, (0,4):10, (0,5):11, 
-(1,3):12, (1,4):13, (1,5):14,
-(2,3):15, (2,4):16, (2,5):17,
+(1,4):9, (1,5):10, (1,6):11, 
+(2,4):12, (2,5):13, (2,6):14,
+(3,4):15, (3,5):16, (3,6):17,
 
 #Third subgame
-(0,6):18, (0,7):19, (0,8):20, 
-(1,6):21, (1,7):22, (1,8):23,
-(2,6):24, (2,7):25, (2,8):26,
+(1,7):18, (1,8):19, (1,9):20, 
+(2,7):21, (2,8):22, (2,9):23,
+(3,7):24, (3,8):25, (3,9):26,
 
 #Fourth subgame
-(3,0):27, (3,1):28, (3,2):29, 
-(4,0):30, (4,1):31, (4,2):32,
-(5,0):33, (5,1):34, (5,2):35,
+(4,1):27, (4,2):28, (4,3):29, 
+(5,1):30, (5,2):31, (5,3):32,
+(6,1):33, (6,2):34, (6,3):35,
 
-#Fifth subgame 
-(3,3):36, (3,4):37, (3,5):38, 
-(4,3):39, (4,4):40, (4,5):41,
-(5,3):42, (5,4):43, (5,5):44,
+#Fifth subgame
+(4,4):36, (4,5):37, (4,6):38, 
+(5,4):39, (5,5):40, (5,6):41,
+(6,4):42, (6,5):43, (6,6):44,
 
 #Sixth subgame
-(3,6):45, (3,7):46, (3,8):47, 
-(4,6):48, (4,7):49, (4,8):50,
-(5,6):51, (5,7):52, (5,8):53,
+(4,7):45, (4,8):46, (4,9):47, 
+(5,7):48, (5,8):49, (5,9):50,
+(6,7):51, (6,8):52, (6,9):53,
 
 #Seventh subgame
-(6,0):54, (6,1):55, (6,2):56, 
-(7,0):57, (7,1):58, (7,2):59,
-(8,0):60, (8,1):61, (8,2):62,
+(7,1):54, (7,2):55, (7,3):56, 
+(8,1):57, (8,2):58, (8,3):59,
+(9,1):60, (9,2):61, (9,3):62,
 
 #Eighth subgame
-(6,3):63, (6,4):64, (6,5):65, 
-(7,3):66, (7,4):67, (7,5):68,
-(8,3):69, (8,4):70, (8,5):71,
+(7,4):63, (7,5):64, (7,6):65, 
+(8,4):66, (8,5):67, (8,6):68,
+(9,4):69, (9,5):70, (9,6):71,
 
 #Ninth subgame
-(6,6):72, (6,7):73, (6,8):74, 
-(7,6):75, (7,7):76, (7,8):77,
-(8,6):78, (8,7):79, (8,8):80,
+(7,7):72, (7,8):73, (7,9):74, 
+(8,7):75, (8,8):76, (8,9):77,
+(9,7):78, (9,8):79, (9,9):80,
 }
 
 
@@ -132,14 +132,9 @@ class UltimateTicTacToe:
     def is_constrained(self) -> bool:
         '''Returns True if a subgame is constrained, False otherwise.'''
         return self.state[CONSTRAINT_INDEX] != UNCONSTRAINED_STATE_VALUE
-    
-    
+      
     def _verify_move(self, move: Move):
         illegal_action = f"Illegal action {move} - "
-        if self.is_next_symbol_X() and not move.is_symbol_X():
-            raise utttError(illegal_action + "next move belongs to X")
-        if self.is_next_symbol_O() and not move.is_symbol_O():
-            raise utttError(illegal_action + "next move belongs to O")
         if not (0 <= move.index < 81):
             raise utttError(illegal_action + "index outside the valid range")
         if self.is_constrained() and self.constraint != move.index // 9:
@@ -162,13 +157,13 @@ class UltimateTicTacToe:
         self._verify_subgame_result(move)
         self._verify_game_result(move)
 
-        #Check if the subgame on index move.index % 9 is still being played. If it is, constraint to it. Else, unconstrain the game.
-        subgame_index = move.index % 9
-        if not self._get_subgame_result(subgame_index):
-            self.state[CONSTRAINT_INDEX] = subgame_index
-        else:
-            self.state[CONSTRAINT_INDEX] = UNCONSTRAINED_STATE_VALUE
-
+        if not self.is_game_over():
+            #Check if the subgame on index move.index % 9 is still being played. If it is, constraint to it. Else, unconstrain the game.
+            subgame_index = move.index % 9
+            if not self._get_subgame_result(subgame_index):
+                self.state[CONSTRAINT_INDEX] = subgame_index
+            else:
+                self.state[CONSTRAINT_INDEX] = UNCONSTRAINED_STATE_VALUE
 
     def make_move(self,
                 move: Move, #Receives a move and updates the state of the game.
@@ -202,7 +197,7 @@ class UltimateTicTacToe:
     
     def _verify_subgame_result(self, move):
         '''Verifies if the subgame is over and updates the state of the subgame.'''
-        subgame_index = move.index % 9
+        subgame_index = move.index // 9
         subgame = self.state[subgame_index * 9 : subgame_index * 9 + 9]
         if self.is_winning_position(subgame):
             self.state[81 + subgame_index] = move.symbol
@@ -212,9 +207,6 @@ class UltimateTicTacToe:
     def _verify_game_result(self,move):
         '''Verifies if the game is over and updates the state of the game.'''
         symbol = move.symbol
-        for i in range(9):
-            if not self.state[81 + i]:
-                return
         game = self.state[81:90]
         if self.is_winning_position(game):
             self.state[RESULT_INDEX] = symbol
@@ -238,7 +230,7 @@ class UltimateTicTacToe:
             X_STATE_VALUE: 'X',
             O_STATE_VALUE: 'O',
             DRAW_STATE_VALUE: '=',
-            0: '-',
+            0: '·',
         }
 
         subgames = [state_values_map[s] for s in self.state[:81]]
@@ -252,24 +244,24 @@ class UltimateTicTacToe:
             if self.is_constrained():
                 supergame[self.constraint] = '•'
             elif self.constraint == UNCONSTRAINED_STATE_VALUE:
-                supergame = ['•' if s == '-' else s for s in supergame]
+                supergame = ['•' if s == '·' else s for s in supergame]
 
         sb = lambda l, r: ' '.join(subgames[l : r + 1])
         sp = lambda l, r: ' '.join(supergame[l : r + 1])
 
         subgames_str = [
-            '    0 1 2   3 4 5   6 7 8',
-            '  0 ' + sb(0, 2) + ' │ ' + sb(9, 11) + ' │ ' + sb(18, 20),
-            '  1 ' + sb(3, 5) + ' │ ' + sb(12, 14) + ' │ ' + sb(21, 23),
-            '  2 ' + sb(6, 8) + ' │ ' + sb(15, 17) + ' │ ' + sb(24, 26),
+            '    1 2 3   4 5 6   7 8 9',
+            '  1 ' + sb(0, 2)   + ' │ ' + sb(9, 11) +  ' │ ' + sb(18, 20),
+            '  2 ' + sb(3, 5)   + ' │ ' + sb(12, 14) + ' │ ' + sb(21, 23),
+            '  3 ' + sb(6, 8)   + ' │ ' + sb(15, 17) + ' │ ' + sb(24, 26),
             '    ' + '—' * 21,
-            '  3 ' + sb(27, 29) + ' │ ' + sb(36, 38) + ' │ ' + sb(45, 47),
-            '  4 ' + sb(30, 32) + ' │ ' + sb(39, 41) + ' │ ' + sb(48, 50),
-            '  5 ' + sb(33, 35) + ' │ ' + sb(42, 44) + ' │ ' + sb(51, 53),
+            '  4 ' + sb(27, 29) + ' │ ' + sb(36, 38) + ' │ ' + sb(45, 47),
+            '  5 ' + sb(30, 32) + ' │ ' + sb(39, 41) + ' │ ' + sb(48, 50),
+            '  6 ' + sb(33, 35) + ' │ ' + sb(42, 44) + ' │ ' + sb(51, 53),
             '    ' + '—' * 21,
-            '  6 ' + sb(54, 56) + ' │ ' + sb(63, 65) + ' │ ' + sb(72, 74),
-            '  7 ' + sb(57, 59) + ' │ ' + sb(66, 68) + ' │ ' + sb(75, 77),
-            '  8 ' + sb(60, 62) + ' │ ' + sb(69, 71) + ' │ ' + sb(78, 80),
+            '  7 ' + sb(54, 56) + ' │ ' + sb(63, 65) + ' │ ' + sb(72, 74),
+            '  8 ' + sb(57, 59) + ' │ ' + sb(66, 68) + ' │ ' + sb(75, 77),
+            '  9 ' + sb(60, 62) + ' │ ' + sb(69, 71) + ' │ ' + sb(78, 80),
         ]
 
         supergame_str = [
@@ -282,19 +274,19 @@ class UltimateTicTacToe:
         supergame_str = '\n'.join(supergame_str)
 
         next_symbol = state_values_map[self.next_symbol]
-        constraint = 'None' if self.constraint == UNCONSTRAINED_STATE_VALUE else str(self.constraint)
-        result = 'None'
+        constraint = 'None' if self.constraint == UNCONSTRAINED_STATE_VALUE else str(self.constraint+1)
+        result = 'In Game'
         if self.result == X_STATE_VALUE:
-            result = 'X_WON'
+            result = 'X won'
         elif self.result == O_STATE_VALUE:
-            result = 'O_WON'
+            result = 'O won'
         elif self.result == DRAW_STATE_VALUE:
-            result = 'DRAW'
+            result = 'Draw'
 
         output = f'{self.__class__.__name__}(\n'
         output += f'  subgames:\n{subgames_str}\n'
         if not self.is_game_over():
-            output += f'  next_symbol: {next_symbol}\n'
+            output += f'  next player: {next_symbol}\n'
             output += f'  constraint: {constraint}\n'
         output += f'  supergame:\n{supergame_str}\n'
         output += f'  result: {result}\n)'
