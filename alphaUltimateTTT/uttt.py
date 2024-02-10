@@ -91,7 +91,7 @@ class Move:
 class UltimateTicTacToe:
     def __init__(self,
                 state:list() = None): #If no state is given, it generates a new one. 
-        '''The state is a list of 93 elements. 
+        '''The state is a list of 93 elements. \n
         The first 81 elements are the state of each square, 0 for empty, 1 for X and 2 for O. \n
         The next 9 elements are the result of each subgame: 0 while being played, 1 is win for X, 2 is a win for O and 3 for draw.\n 
         The next element is the next symbol to play: 1 for X and 2 for O.\n 
@@ -143,6 +143,7 @@ class UltimateTicTacToe:
         
     def _update_state(self,
                       move: Move): #Updates the state of the game after a move.
+        '''Updates the state of the game after a move. It also verifies if the subgame and the game are over.'''
         self.state[move.index] = move.symbol
         self.state[NEXT_SYMBOL_INDEX] = X_STATE_VALUE + O_STATE_VALUE - move.symbol
 
@@ -160,7 +161,7 @@ class UltimateTicTacToe:
     def make_move(self,
                 move: Move, #Receives a move and updates the state of the game.
                 verify: bool = True): #A boolean to verify if the move is valid.
-        '''Makes a move in the game.'''
+        '''Makes a move in the game. It verifies if the move is valid'''
         if verify:
             if self.is_game_over():
                 raise utttError('The game is over')
@@ -303,6 +304,6 @@ class UltimateTicTacToe:
         self.make_move(Move(self.next_symbol, index))
         print(self)
 
-# %% ../nbs/Game/ultimatettt.ipynb 7
+# %% ../nbs/Game/ultimatettt.ipynb 6
 class utttError(Exception):
     pass
