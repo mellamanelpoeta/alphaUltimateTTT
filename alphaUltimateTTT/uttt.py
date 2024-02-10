@@ -91,7 +91,7 @@ class Move:
 class UltimateTicTacToe:
     def __init__(self,
                 state:list() = None): #If no state is given, it generates a new one. 
-        '''The state is a bytearray of 93 elements. 
+        '''The state is a list of 93 elements. 
         The first 81 elements are the state of each square, 0 for empty, 1 for X and 2 for O. \n
         The next 9 elements are the result of each subgame: 0 while being played, 1 is win for X, 2 is a win for O and 3 for draw.\n 
         The next element is the next symbol to play: 1 for X and 2 for O.\n 
@@ -121,14 +121,6 @@ class UltimateTicTacToe:
         '''Returns True if the game is over, False otherwise.'''
         return bool(self.state[RESULT_INDEX])
     
-    def is_next_symbol_X(self) -> bool:
-        '''Returns True if the next symbol to play is X, False otherwise.'''
-        return self.state[NEXT_SYMBOL_INDEX] == X_STATE_VALUE
-    
-    def is_next_symbol_O(self) -> bool:
-        '''Returns True if the next symbol to play is O, False otherwise.'''
-        return self.state[NEXT_SYMBOL_INDEX] == O_STATE_VALUE
-    
     def is_constrained(self) -> bool:
         '''Returns True if a subgame is constrained, False otherwise.'''
         return self.state[CONSTRAINT_INDEX] != UNCONSTRAINED_STATE_VALUE
@@ -138,11 +130,11 @@ class UltimateTicTacToe:
         if not (0 <= move.index < 81):
             raise utttError(illegal_action + "index outside the valid range")
         if self.is_constrained() and self.constraint != move.index // 9:
-            raise utttError(illegal_action + f"violated constraint={self.constraint}")
+            raise utttError(illegal_action + f"violated constraint = {self.constraint}")
         if self.state[81 + move.index // 9]:
             raise utttError(illegal_action + "index from terminated subgame")
         if self.state[move.index]:
-            raise utttError(illegal_action + "index is already taken")
+            raise utttError(illegal_action + "index already taken")
         
     def _get_subgame_result(self,
                             subgame_index: int) -> int:   #Index of the subgame from 0 to 8
@@ -216,11 +208,18 @@ class UltimateTicTacToe:
     def is_winner(self, index: int) -> bool:
         '''Returns True if the symbol in the index is the winner, False otherwise.'''
         return self.state[81 + index] == 1 or self.state[81 + index] == 2
-
+    
     def get_legal_indexes(self) -> list:
         '''Returns a list with the indexes of the legal moves.'''
         if not self.is_constrained():
-            return [i for i in range(81) if not self.state[i]]
+            ## If the game is not constrained, all the empty squares are legal moves, except the ones from subgames that are already over.
+            legal = []
+            for subgame_index in range(9):
+                if not self._get_subgame_result(subgame_index):
+                    for i in range(subgame_index * 9, subgame_index * 9 + 9):
+                        if not self.state[i]:
+                            legal.append(i)
+            return legal
         else:
             subgame_index = self.state[CONSTRAINT_INDEX]
             return [i for i in range(subgame_index * 9, subgame_index * 9 + 9) if not self.state[i]]
