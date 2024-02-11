@@ -5,8 +5,9 @@ website:
       - section: Game
         contents:
           - Game/About.ipynb
-          - Game/Showcase.ipynb
-          - Game/ultimatettt.ipynb
       - section: Python implementation
         contents:
+          - Python implementation/Constants.ipynb
           - Python implementation/Move.ipynb
+          - Python implementation/UltimateTicTacToe.ipynb
+          - Python implementation/Showcase.ipynb

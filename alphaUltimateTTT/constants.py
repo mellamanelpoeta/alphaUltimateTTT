@@ -5,6 +5,9 @@ __all__ = ['SIZE', 'NEXT_SYMBOL_INDEX', 'CONSTRAINT_INDEX', 'RESULT_INDEX', 'X_S
            'UNCONSTRAINED_STATE_VALUE', 'MAPPING']
 
 # %% ../nbs/Python implementation/Constants.ipynb 3
+#Copyright 2024 Gerardo Guerrero
+
+
 #0-80 squares, 81-89 result of each subgame, 90 next symbol, 91 subgame constraint, 92 result of uttt
 SIZE = 93 
 NEXT_SYMBOL_INDEX = 90

@@ -4,8 +4,10 @@
 __all__ = ['UltimateTicTacToe', 'utttError']
 
 # %% ../nbs/Python implementation/UltimateTicTacToe.ipynb 3
+#Copyright 2024 Gerardo Guerrero
+
 from .constants import *
-from .Move import Move
+from .Move import *
 
 class UltimateTicTacToe:
     def __init__(self,
@@ -44,7 +46,11 @@ class UltimateTicTacToe:
         '''Returns True if a subgame is constrained, False otherwise.'''
         return self.state[CONSTRAINT_INDEX] != UNCONSTRAINED_STATE_VALUE
       
-    def _verify_move(self, move: Move):
+    def _verify_move(self, 
+                     move: Move): #Verifies if the move is valid.
+        '''Verifies if the move is valid: if the index is in the valid range, 
+        if the subgame is not over, if the index is not already taken and if the subgame is not constrained.
+          If it is not, it raises an exception.'''
         illegal_move = f"Illegal move {move} - "
         if not (0 <= move.index < 81):
             raise utttError(illegal_move + "index outside the valid range")
@@ -77,7 +83,7 @@ class UltimateTicTacToe:
             else:
                 self.state[CONSTRAINT_INDEX] = UNCONSTRAINED_STATE_VALUE
 
-    def make_move(self,
+    def _make_move(self,
                 move: Move, #Receives a move and updates the state of the game.
                 verify: bool = True): #A boolean to verify if the move is valid.
         '''Makes a move in the game. It verifies if the move is valid'''
@@ -125,11 +131,7 @@ class UltimateTicTacToe:
         elif self.is_drawn_position(game):
             self.state[RESULT_INDEX] = DRAW_STATE_VALUE
     
-    def is_winner(self, index: int) -> bool:
-        '''Returns True if the symbol in the index is the winner, False otherwise.'''
-        return self.state[81 + index] == 1 or self.state[81 + index] == 2
-    
-    def get_legal_indexes(self) -> list:
+    def _get_legal_indexes(self) -> list:
         '''Returns a list with the indexes of the legal moves.'''
         if not self.is_constrained():
             ## If the game is not constrained, all the empty squares are legal moves, except the ones from subgames that are already over.
@@ -156,7 +158,7 @@ class UltimateTicTacToe:
         supergame = [state_values_map[s] for s in self.state[81:90]]
 
         if not self.is_game_over():
-            legal_indexes = self.get_legal_indexes()
+            legal_indexes = self._get_legal_indexes()
             for legal_index in legal_indexes:
                 subgames[legal_index] = '•'
 
@@ -220,9 +222,10 @@ class UltimateTicTacToe:
     def play(self, matrix_index: int):
         '''Plays the game. Receives a matrix index and makes a move in the corresponding state index.'''
         index = self.map_matrix_to_subgame(matrix_index)
-        self.make_move(Move(self.next_symbol, index))
+        self._make_move(Move(self.next_symbol, index))
         print(self)
 
-# %% ../nbs/Python implementation/UltimateTicTacToe.ipynb 4
+
+# %% ../nbs/Python implementation/UltimateTicTacToe.ipynb 11
 class utttError(Exception):
     pass

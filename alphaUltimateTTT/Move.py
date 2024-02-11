@@ -4,6 +4,8 @@
 __all__ = ['Move']
 
 # %% ../nbs/Python implementation/Move.ipynb 3
+#Copyright 2024 Gerardo Guerrero
+
 from .constants import X_STATE_VALUE, O_STATE_VALUE
 
 class Move:

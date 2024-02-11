@@ -19,9 +19,15 @@ d = { 'settings': { 'branch': 'main',
                                                     'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe.__str__': ( 'Python '
                                                                                                                       'implementation/ultimatetictactoe.html#ultimatetictactoe.__str__',
                                                                                                                       'alphaUltimateTTT/UltimateTicTacToe.py'),
+                                                    'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe._get_legal_indexes': ( 'Python '
+                                                                                                                                 'implementation/ultimatetictactoe.html#ultimatetictactoe._get_legal_indexes',
+                                                                                                                                 'alphaUltimateTTT/UltimateTicTacToe.py'),
                                                     'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe._get_subgame_result': ( 'Python '
                                                                                                                                   'implementation/ultimatetictactoe.html#ultimatetictactoe._get_subgame_result',
                                                                                                                                   'alphaUltimateTTT/UltimateTicTacToe.py'),
+                                                    'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe._make_move': ( 'Python '
+                                                                                                                         'implementation/ultimatetictactoe.html#ultimatetictactoe._make_move',
+                                                                                                                         'alphaUltimateTTT/UltimateTicTacToe.py'),
                                                     'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe._update_state': ( 'Python '
                                                                                                                             'implementation/ultimatetictactoe.html#ultimatetictactoe._update_state',
                                                                                                                             'alphaUltimateTTT/UltimateTicTacToe.py'),
@@ -37,9 +43,6 @@ d = { 'settings': { 'branch': 'main',
                                                     'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe.constraint': ( 'Python '
                                                                                                                          'implementation/ultimatetictactoe.html#ultimatetictactoe.constraint',
                                                                                                                          'alphaUltimateTTT/UltimateTicTacToe.py'),
-                                                    'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe.get_legal_indexes': ( 'Python '
-                                                                                                                                'implementation/ultimatetictactoe.html#ultimatetictactoe.get_legal_indexes',
-                                                                                                                                'alphaUltimateTTT/UltimateTicTacToe.py'),
                                                     'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe.is_constrained': ( 'Python '
                                                                                                                              'implementation/ultimatetictactoe.html#ultimatetictactoe.is_constrained',
                                                                                                                              'alphaUltimateTTT/UltimateTicTacToe.py'),
@@ -49,15 +52,9 @@ d = { 'settings': { 'branch': 'main',
                                                     'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe.is_game_over': ( 'Python '
                                                                                                                            'implementation/ultimatetictactoe.html#ultimatetictactoe.is_game_over',
                                                                                                                            'alphaUltimateTTT/UltimateTicTacToe.py'),
-                                                    'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe.is_winner': ( 'Python '
-                                                                                                                        'implementation/ultimatetictactoe.html#ultimatetictactoe.is_winner',
-                                                                                                                        'alphaUltimateTTT/UltimateTicTacToe.py'),
                                                     'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe.is_winning_position': ( 'Python '
                                                                                                                                   'implementation/ultimatetictactoe.html#ultimatetictactoe.is_winning_position',
                                                                                                                                   'alphaUltimateTTT/UltimateTicTacToe.py'),
-                                                    'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe.make_move': ( 'Python '
-                                                                                                                        'implementation/ultimatetictactoe.html#ultimatetictactoe.make_move',
-                                                                                                                        'alphaUltimateTTT/UltimateTicTacToe.py'),
                                                     'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe.map_matrix_to_subgame': ( 'Python '
                                                                                                                                     'implementation/ultimatetictactoe.html#ultimatetictactoe.map_matrix_to_subgame',
                                                                                                                                     'alphaUltimateTTT/UltimateTicTacToe.py'),
