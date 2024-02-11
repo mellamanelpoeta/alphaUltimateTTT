@@ -126,15 +126,15 @@ class UltimateTicTacToe:
         return self.state[CONSTRAINT_INDEX] != UNCONSTRAINED_STATE_VALUE
       
     def _verify_move(self, move: Move):
-        illegal_action = f"Illegal action {move} - "
+        illegal_move = f"Illegal move {move} - "
         if not (0 <= move.index < 81):
-            raise utttError(illegal_action + "index outside the valid range")
+            raise utttError(illegal_move + "index outside the valid range")
         if self.is_constrained() and self.constraint != move.index // 9:
-            raise utttError(illegal_action + f"violated constraint = {self.constraint}")
+            raise utttError(illegal_move + f"violated constraint = {self.constraint}")
         if self.state[81 + move.index // 9]:
-            raise utttError(illegal_action + "index from terminated subgame")
+            raise utttError(illegal_move + "index from terminated subgame")
         if self.state[move.index]:
-            raise utttError(illegal_action + "index already taken")
+            raise utttError(illegal_move + "index already taken")
         
     def _get_subgame_result(self,
                             subgame_index: int) -> int:   #Index of the subgame from 0 to 8
@@ -164,7 +164,7 @@ class UltimateTicTacToe:
         '''Makes a move in the game. It verifies if the move is valid'''
         if verify:
             if self.is_game_over():
-                raise utttError('The game is over')
+                raise utttError("Illegal move " + str(move) + ' - The game is over')
             self._verify_move(move)
 
         self._update_state(move)
