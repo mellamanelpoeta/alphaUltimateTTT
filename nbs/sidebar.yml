@@ -5,9 +5,13 @@ website:
       - section: Game
         contents:
           - Game/About.ipynb
-      - section: Python implementation
+          - section: Python implementation
+            contents:
+              - Game/Python implementation/Constants.ipynb
+              - Game/Python implementation/Move.ipynb
+              - Game/Python implementation/UltimateTicTacToe.ipynb
+              - Game/Python implementation/Showcase.ipynb
+      - section: MCTS
         contents:
-          - Python implementation/Constants.ipynb
-          - Python implementation/Move.ipynb
-          - Python implementation/UltimateTicTacToe.ipynb
-          - Python implementation/Showcase.ipynb
+          - MCTS/Node.ipynb
+          - MCTS/MCTS.ipynb

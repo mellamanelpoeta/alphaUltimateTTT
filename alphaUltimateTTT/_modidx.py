@@ -5,115 +5,94 @@ d = { 'settings': { 'branch': 'main',
                 'doc_host': 'https://mellamanelpoeta.github.io',
                 'git_url': 'https://github.com/mellamanelpoeta/alphaUltimateTTT',
                 'lib_path': 'alphaUltimateTTT'},
-  'syms': { 'alphaUltimateTTT.Move': { 'alphaUltimateTTT.Move.Move': ('Python implementation/move.html#move', 'alphaUltimateTTT/Move.py'),
-                                       'alphaUltimateTTT.Move.Move.__init__': ( 'Python implementation/move.html#move.__init__',
+  'syms': { 'alphaUltimateTTT.MCTS': { 'alphaUltimateTTT.MCTS.MCTS': ('MCTS/mcts.html#mcts', 'alphaUltimateTTT/MCTS.py'),
+                                       'alphaUltimateTTT.MCTS.MCTS.__init__': ('MCTS/mcts.html#mcts.__init__', 'alphaUltimateTTT/MCTS.py'),
+                                       'alphaUltimateTTT.MCTS.MCTS.search': ('MCTS/mcts.html#mcts.search', 'alphaUltimateTTT/MCTS.py')},
+            'alphaUltimateTTT.Move': { 'alphaUltimateTTT.Move.Move': ( 'Game/Python implementation/move.html#move',
+                                                                       'alphaUltimateTTT/Move.py'),
+                                       'alphaUltimateTTT.Move.Move.__init__': ( 'Game/Python implementation/move.html#move.__init__',
                                                                                 'alphaUltimateTTT/Move.py'),
-                                       'alphaUltimateTTT.Move.Move.__str__': ( 'Python implementation/move.html#move.__str__',
+                                       'alphaUltimateTTT.Move.Move.__str__': ( 'Game/Python implementation/move.html#move.__str__',
                                                                                'alphaUltimateTTT/Move.py')},
-            'alphaUltimateTTT.UltimateTicTacToe': { 'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe': ( 'Python '
+            'alphaUltimateTTT.Node': { 'alphaUltimateTTT.Node.Node': ('MCTS/node.html#node', 'alphaUltimateTTT/Node.py'),
+                                       'alphaUltimateTTT.Node.Node.__init__': ('MCTS/node.html#node.__init__', 'alphaUltimateTTT/Node.py'),
+                                       'alphaUltimateTTT.Node.Node._get_ucb': ('MCTS/node.html#node._get_ucb', 'alphaUltimateTTT/Node.py'),
+                                       'alphaUltimateTTT.Node.Node.backpropagate': ( 'MCTS/node.html#node.backpropagate',
+                                                                                     'alphaUltimateTTT/Node.py'),
+                                       'alphaUltimateTTT.Node.Node.expand': ('MCTS/node.html#node.expand', 'alphaUltimateTTT/Node.py'),
+                                       'alphaUltimateTTT.Node.Node.is_fully_expanded': ( 'MCTS/node.html#node.is_fully_expanded',
+                                                                                         'alphaUltimateTTT/Node.py'),
+                                       'alphaUltimateTTT.Node.Node.is_terminal': ( 'MCTS/node.html#node.is_terminal',
+                                                                                   'alphaUltimateTTT/Node.py'),
+                                       'alphaUltimateTTT.Node.Node.select': ('MCTS/node.html#node.select', 'alphaUltimateTTT/Node.py'),
+                                       'alphaUltimateTTT.Node.Node.simulate': ('MCTS/node.html#node.simulate', 'alphaUltimateTTT/Node.py')},
+            'alphaUltimateTTT.UltimateTicTacToe': { 'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe': ( 'Game/Python '
                                                                                                               'implementation/ultimatetictactoe.html#ultimatetictactoe',
                                                                                                               'alphaUltimateTTT/UltimateTicTacToe.py'),
-                                                    'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe.__init__': ( 'Python '
+                                                    'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe.__init__': ( 'Game/Python '
                                                                                                                        'implementation/ultimatetictactoe.html#ultimatetictactoe.__init__',
                                                                                                                        'alphaUltimateTTT/UltimateTicTacToe.py'),
-                                                    'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe.__str__': ( 'Python '
+                                                    'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe.__str__': ( 'Game/Python '
                                                                                                                       'implementation/ultimatetictactoe.html#ultimatetictactoe.__str__',
                                                                                                                       'alphaUltimateTTT/UltimateTicTacToe.py'),
-                                                    'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe._get_legal_indexes': ( 'Python '
+                                                    'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe._get_legal_indexes': ( 'Game/Python '
                                                                                                                                  'implementation/ultimatetictactoe.html#ultimatetictactoe._get_legal_indexes',
                                                                                                                                  'alphaUltimateTTT/UltimateTicTacToe.py'),
-                                                    'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe._get_subgame_result': ( 'Python '
+                                                    'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe._get_state': ( 'Game/Python '
+                                                                                                                         'implementation/ultimatetictactoe.html#ultimatetictactoe._get_state',
+                                                                                                                         'alphaUltimateTTT/UltimateTicTacToe.py'),
+                                                    'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe._get_subgame_result': ( 'Game/Python '
                                                                                                                                   'implementation/ultimatetictactoe.html#ultimatetictactoe._get_subgame_result',
                                                                                                                                   'alphaUltimateTTT/UltimateTicTacToe.py'),
-                                                    'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe._make_move': ( 'Python '
+                                                    'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe._make_move': ( 'Game/Python '
                                                                                                                          'implementation/ultimatetictactoe.html#ultimatetictactoe._make_move',
                                                                                                                          'alphaUltimateTTT/UltimateTicTacToe.py'),
-                                                    'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe._update_state': ( 'Python '
+                                                    'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe._update_state': ( 'Game/Python '
                                                                                                                             'implementation/ultimatetictactoe.html#ultimatetictactoe._update_state',
                                                                                                                             'alphaUltimateTTT/UltimateTicTacToe.py'),
-                                                    'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe._verify_game_result': ( 'Python '
+                                                    'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe._verify_game_result': ( 'Game/Python '
                                                                                                                                   'implementation/ultimatetictactoe.html#ultimatetictactoe._verify_game_result',
                                                                                                                                   'alphaUltimateTTT/UltimateTicTacToe.py'),
-                                                    'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe._verify_move': ( 'Python '
+                                                    'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe._verify_move': ( 'Game/Python '
                                                                                                                            'implementation/ultimatetictactoe.html#ultimatetictactoe._verify_move',
                                                                                                                            'alphaUltimateTTT/UltimateTicTacToe.py'),
-                                                    'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe._verify_subgame_result': ( 'Python '
+                                                    'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe._verify_subgame_result': ( 'Game/Python '
                                                                                                                                      'implementation/ultimatetictactoe.html#ultimatetictactoe._verify_subgame_result',
                                                                                                                                      'alphaUltimateTTT/UltimateTicTacToe.py'),
-                                                    'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe.constraint': ( 'Python '
+                                                    'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe.constraint': ( 'Game/Python '
                                                                                                                          'implementation/ultimatetictactoe.html#ultimatetictactoe.constraint',
                                                                                                                          'alphaUltimateTTT/UltimateTicTacToe.py'),
-                                                    'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe.is_constrained': ( 'Python '
+                                                    'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe.copy': ( 'Game/Python '
+                                                                                                                   'implementation/ultimatetictactoe.html#ultimatetictactoe.copy',
+                                                                                                                   'alphaUltimateTTT/UltimateTicTacToe.py'),
+                                                    'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe.get_winner': ( 'Game/Python '
+                                                                                                                         'implementation/ultimatetictactoe.html#ultimatetictactoe.get_winner',
+                                                                                                                         'alphaUltimateTTT/UltimateTicTacToe.py'),
+                                                    'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe.is_constrained': ( 'Game/Python '
                                                                                                                              'implementation/ultimatetictactoe.html#ultimatetictactoe.is_constrained',
                                                                                                                              'alphaUltimateTTT/UltimateTicTacToe.py'),
-                                                    'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe.is_drawn_position': ( 'Python '
+                                                    'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe.is_drawn_position': ( 'Game/Python '
                                                                                                                                 'implementation/ultimatetictactoe.html#ultimatetictactoe.is_drawn_position',
                                                                                                                                 'alphaUltimateTTT/UltimateTicTacToe.py'),
-                                                    'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe.is_game_over': ( 'Python '
+                                                    'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe.is_game_over': ( 'Game/Python '
                                                                                                                            'implementation/ultimatetictactoe.html#ultimatetictactoe.is_game_over',
                                                                                                                            'alphaUltimateTTT/UltimateTicTacToe.py'),
-                                                    'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe.is_winning_position': ( 'Python '
+                                                    'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe.is_winning_position': ( 'Game/Python '
                                                                                                                                   'implementation/ultimatetictactoe.html#ultimatetictactoe.is_winning_position',
                                                                                                                                   'alphaUltimateTTT/UltimateTicTacToe.py'),
-                                                    'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe.map_matrix_to_subgame': ( 'Python '
+                                                    'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe.map_matrix_to_subgame': ( 'Game/Python '
                                                                                                                                     'implementation/ultimatetictactoe.html#ultimatetictactoe.map_matrix_to_subgame',
                                                                                                                                     'alphaUltimateTTT/UltimateTicTacToe.py'),
-                                                    'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe.next_symbol': ( 'Python '
+                                                    'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe.next_symbol': ( 'Game/Python '
                                                                                                                           'implementation/ultimatetictactoe.html#ultimatetictactoe.next_symbol',
                                                                                                                           'alphaUltimateTTT/UltimateTicTacToe.py'),
-                                                    'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe.play': ( 'Python '
+                                                    'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe.play': ( 'Game/Python '
                                                                                                                    'implementation/ultimatetictactoe.html#ultimatetictactoe.play',
                                                                                                                    'alphaUltimateTTT/UltimateTicTacToe.py'),
-                                                    'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe.result': ( 'Python '
+                                                    'alphaUltimateTTT.UltimateTicTacToe.UltimateTicTacToe.result': ( 'Game/Python '
                                                                                                                      'implementation/ultimatetictactoe.html#ultimatetictactoe.result',
                                                                                                                      'alphaUltimateTTT/UltimateTicTacToe.py'),
-                                                    'alphaUltimateTTT.UltimateTicTacToe.utttError': ( 'Python '
+                                                    'alphaUltimateTTT.UltimateTicTacToe.utttError': ( 'Game/Python '
                                                                                                       'implementation/ultimatetictactoe.html#uttterror',
                                                                                                       'alphaUltimateTTT/UltimateTicTacToe.py')},
-            'alphaUltimateTTT.constants': {},
-            'alphaUltimateTTT.uttt': { 'alphaUltimateTTT.uttt.Move': ('Game/ultimatettt.html#move', 'alphaUltimateTTT/uttt.py'),
-                                       'alphaUltimateTTT.uttt.Move.__init__': ( 'Game/ultimatettt.html#move.__init__',
-                                                                                'alphaUltimateTTT/uttt.py'),
-                                       'alphaUltimateTTT.uttt.Move.__str__': ( 'Game/ultimatettt.html#move.__str__',
-                                                                               'alphaUltimateTTT/uttt.py'),
-                                       'alphaUltimateTTT.uttt.UltimateTicTacToe': ( 'Game/ultimatettt.html#ultimatetictactoe',
-                                                                                    'alphaUltimateTTT/uttt.py'),
-                                       'alphaUltimateTTT.uttt.UltimateTicTacToe.__init__': ( 'Game/ultimatettt.html#ultimatetictactoe.__init__',
-                                                                                             'alphaUltimateTTT/uttt.py'),
-                                       'alphaUltimateTTT.uttt.UltimateTicTacToe.__str__': ( 'Game/ultimatettt.html#ultimatetictactoe.__str__',
-                                                                                            'alphaUltimateTTT/uttt.py'),
-                                       'alphaUltimateTTT.uttt.UltimateTicTacToe._get_subgame_result': ( 'Game/ultimatettt.html#ultimatetictactoe._get_subgame_result',
-                                                                                                        'alphaUltimateTTT/uttt.py'),
-                                       'alphaUltimateTTT.uttt.UltimateTicTacToe._update_state': ( 'Game/ultimatettt.html#ultimatetictactoe._update_state',
-                                                                                                  'alphaUltimateTTT/uttt.py'),
-                                       'alphaUltimateTTT.uttt.UltimateTicTacToe._verify_game_result': ( 'Game/ultimatettt.html#ultimatetictactoe._verify_game_result',
-                                                                                                        'alphaUltimateTTT/uttt.py'),
-                                       'alphaUltimateTTT.uttt.UltimateTicTacToe._verify_move': ( 'Game/ultimatettt.html#ultimatetictactoe._verify_move',
-                                                                                                 'alphaUltimateTTT/uttt.py'),
-                                       'alphaUltimateTTT.uttt.UltimateTicTacToe._verify_subgame_result': ( 'Game/ultimatettt.html#ultimatetictactoe._verify_subgame_result',
-                                                                                                           'alphaUltimateTTT/uttt.py'),
-                                       'alphaUltimateTTT.uttt.UltimateTicTacToe.constraint': ( 'Game/ultimatettt.html#ultimatetictactoe.constraint',
-                                                                                               'alphaUltimateTTT/uttt.py'),
-                                       'alphaUltimateTTT.uttt.UltimateTicTacToe.get_legal_indexes': ( 'Game/ultimatettt.html#ultimatetictactoe.get_legal_indexes',
-                                                                                                      'alphaUltimateTTT/uttt.py'),
-                                       'alphaUltimateTTT.uttt.UltimateTicTacToe.is_constrained': ( 'Game/ultimatettt.html#ultimatetictactoe.is_constrained',
-                                                                                                   'alphaUltimateTTT/uttt.py'),
-                                       'alphaUltimateTTT.uttt.UltimateTicTacToe.is_drawn_position': ( 'Game/ultimatettt.html#ultimatetictactoe.is_drawn_position',
-                                                                                                      'alphaUltimateTTT/uttt.py'),
-                                       'alphaUltimateTTT.uttt.UltimateTicTacToe.is_game_over': ( 'Game/ultimatettt.html#ultimatetictactoe.is_game_over',
-                                                                                                 'alphaUltimateTTT/uttt.py'),
-                                       'alphaUltimateTTT.uttt.UltimateTicTacToe.is_winner': ( 'Game/ultimatettt.html#ultimatetictactoe.is_winner',
-                                                                                              'alphaUltimateTTT/uttt.py'),
-                                       'alphaUltimateTTT.uttt.UltimateTicTacToe.is_winning_position': ( 'Game/ultimatettt.html#ultimatetictactoe.is_winning_position',
-                                                                                                        'alphaUltimateTTT/uttt.py'),
-                                       'alphaUltimateTTT.uttt.UltimateTicTacToe.make_move': ( 'Game/ultimatettt.html#ultimatetictactoe.make_move',
-                                                                                              'alphaUltimateTTT/uttt.py'),
-                                       'alphaUltimateTTT.uttt.UltimateTicTacToe.map_matrix_to_subgame': ( 'Game/ultimatettt.html#ultimatetictactoe.map_matrix_to_subgame',
-                                                                                                          'alphaUltimateTTT/uttt.py'),
-                                       'alphaUltimateTTT.uttt.UltimateTicTacToe.next_symbol': ( 'Game/ultimatettt.html#ultimatetictactoe.next_symbol',
-                                                                                                'alphaUltimateTTT/uttt.py'),
-                                       'alphaUltimateTTT.uttt.UltimateTicTacToe.play': ( 'Game/ultimatettt.html#ultimatetictactoe.play',
-                                                                                         'alphaUltimateTTT/uttt.py'),
-                                       'alphaUltimateTTT.uttt.UltimateTicTacToe.result': ( 'Game/ultimatettt.html#ultimatetictactoe.result',
-                                                                                           'alphaUltimateTTT/uttt.py'),
-                                       'alphaUltimateTTT.uttt.utttError': ('Game/ultimatettt.html#uttterror', 'alphaUltimateTTT/uttt.py')}}}
+            'alphaUltimateTTT.constants': {}}}
